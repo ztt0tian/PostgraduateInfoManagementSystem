@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.dao.interfaces.TutorMapper">
+  <resultMap id="BaseResultMap" type="com.system.model.Tutor">
+    <constructor>
+      <idArg column="tutor_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="tutor_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tutor_psw" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    tutor_id, tutor_name, tutor_psw
+  </sql>
+  <select id="selectByExample" parameterType="com.system.model.TutorExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tutor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tutor
+    where tutor_id = #{tutor_id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tutor
+    where tutor_id = #{tutor_id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.system.model.TutorExample">
+    delete from tutor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.system.model.Tutor">
+    insert into tutor (tutor_id, tutor_name, tutor_psw
+      )
+    values (#{tutor_id,jdbcType=INTEGER}, #{tutor_name,jdbcType=VARCHAR}, #{tutor_psw,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.model.Tutor">
+    insert into tutor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tutor_id != null">
+        tutor_id,
+      </if>
+      <if test="tutor_name != null">
+        tutor_name,
+      </if>
+      <if test="tutor_psw != null">
+        tutor_psw,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tutor_id != null">
+        #{tutor_id,jdbcType=INTEGER},
+      </if>
+      <if test="tutor_name != null">
+        #{tutor_name,jdbcType=VARCHAR},
+      </if>
+      <if test="tutor_psw != null">
+        #{tutor_psw,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.system.model.TutorExample" resultType="java.lang.Long">
+    select count(*) from tutor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tutor
+    <set>
+      <if test="record.tutor_id != null">
+        tutor_id = #{record.tutor_id,jdbcType=INTEGER},
+      </if>
+      <if test="record.tutor_name != null">
+        tutor_name = #{record.tutor_name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tutor_psw != null">
+        tutor_psw = #{record.tutor_psw,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tutor
+    set tutor_id = #{record.tutor_id,jdbcType=INTEGER},
+      tutor_name = #{record.tutor_name,jdbcType=VARCHAR},
+      tutor_psw = #{record.tutor_psw,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.model.Tutor">
+    update tutor
+    <set>
+      <if test="tutor_name != null">
+        tutor_name = #{tutor_name,jdbcType=VARCHAR},
+      </if>
+      <if test="tutor_psw != null">
+        tutor_psw = #{tutor_psw,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tutor_id = #{tutor_id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.model.Tutor">
+    update tutor
+    set tutor_name = #{tutor_name,jdbcType=VARCHAR},
+      tutor_psw = #{tutor_psw,jdbcType=VARCHAR}
+    where tutor_id = #{tutor_id,jdbcType=INTEGER}
+  </update>
+</mapper>

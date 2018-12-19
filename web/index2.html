@@ -1,0 +1,126 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <title>研究生管理系统</title>
+    <link rel="stylesheet" type="text/css" href="css/globe.css">
+    <script type="text/javascript" language="javascript" src="js/jsbn.js"></script>
+    <script type="text/javascript" language="javascript" src="js/rsa.js"></script>
+    <style type="text/css">
+        body, div, span, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td { margin: 0 auto; padding: 0; }
+        table { border-collapse: collapse; border-spacing: 0; }
+        fieldset, img { border: 0; }
+        address, caption, cite, code, dfn, em, strong, th, var { font-style: normal; font-weight: normal; }
+        ol, ul, dl, li, dt, dd { list-style: none; }
+        caption, th { text-align: left; }
+        h1, h2, h3, h4, h5, h6 { font-weight: normal; }
+        q:before, q:after { content: ''; }
+        abbr, acronym { border: 0; }
+        a { outline: 0; }
+        input, select { font-size: 13px; line-height: 18px; }
+        body, html { height: 100%; overflow: hidden; }
+        #outer { height: 100%; overflow: hidden; position: relative; width: 100%; }
+        #outer[id] { display: table; position: static; }
+        #middle { position: absolute; top: 50%!important; top: 0; left: 0 }
+        #middle[id] { display: table-cell; vertical-align: middle; position: static; }
+        #content { width: 1366px; height: 768px; position: relative; background: url(images/bg.jpg) no-repeat; }
+        .loginbox { width: 400px; height: auto; float: right; background: #fff; margin: 60px 20%; padding: 15px 30px; box-shadow: 2px 4px 6px #666; }
+        .header { width: 320px; height: 50px; float: left; background: url(images/logo.gif) left top no-repeat; }
+        .lang { width: 400px; height: auto; float: right; font-size: 14px; line-height: 18px; border-bottom: 1px solid #ddd; margin-bottom: 3px; }
+        .lang a { float: right; color: #07f; text-decoration: underline; }
+        .item { width: 100%; height: 26px; float: left; margin-top: 7px; }
+        .item span { width: 67px; height: 24px; float: left; display: block; color: #333; font-size: 14px; line-height: 24px; text-align: right; }
+        .item input { width: 190px; height: 22px; float: left; display: block; margin-right: 3px; }
+        .item select { width: 192px; height: 24px; float: left; display: block; margin-right: 3px; }
+        .item .errmsg { width: 130px; height: 24px; float: left; display: block; color: #f00; font-size: 12px; line-height: 24px; }
+        .item img { width: 124px; height: 24px; float: left; margin-left: 66px; }
+        .item .loginbtn { width: 120px; height: 28px; float: left; margin-left: 138px; background: url(images/loginbtn.gif) no-repeat; text-indent: 999px; padding: 0; border: none; cursor: pointer; }
+
+        .item .loginbtn_new { width: 120px; height: 28px; float: left; margin-left: 67px; background: url(images/loginbtn.gif) no-repeat; text-indent: 999px; padding: 0; border: none; cursor: pointer; }
+        .item .resetpass { width: 77px; height: 28px; float: left; font-size:16px;text-decoration:none;margin-left:8px;margin-top:4px; color:#256194;  padding: 0; border: none; cursor: pointer; }
+
+
+        .tips { width: 100%; height: auto; float: left; color: #999; font-size: 12px; line-height: 18px; margin-top: 15px; padding-top: 5px; border-top: 1px solid #ddd; }
+        .version {width: 100%; height: auto; float: left; color: #999; font-size: 12px;text-decoration:underline; line-height: 18px;border-top: 1px solid #ddd;padding-top: 3px; margin-top: 5px;}
+        #handmoreId {margin-left:140px;}
+    </style>
+    <script type="text/javascript">
+        function changeValidateCode() {
+            window.location = window.location;
+        }
+        function generateValidateCode(){
+            var timenow = new Date().getTime();
+            document.getElementById("rand").src="rand.action?d="+timenow;
+        }
+        function senddata()
+        {
+            var skey = document.getElementById("key").value;
+            RSA.sendData(document.getElementById("key").value,document.getElementById("password"));
+            return true;
+        }
+    </script>
+</head>
+<body>
+<div id="outer">
+    <div id="middle">
+        <div id="content">
+            <div class="loginbox">
+                <div class="header"></div>
+                <div class="lang"></div>
+                <form id="fm1" class="fm-v clearfix" action="#" method="post" onsubmit="return senddata();">
+                    <div class="item">
+                        <span>角　色：</span>
+                        <select id="role" name="role">
+                            <option value="1">管理员</option>
+                            <option value="2">教师</option>
+                            <option selected="selected" value="3">研究生</option>
+                        </select>
+
+                    </div>
+                    <div class="item">
+                        <span>用户名：</span>
+                        <input id="username" name="username" tabindex="1" type="text" value="" autocomplete="false">
+
+                    </div>
+                    <div class="item">
+                        <span>密　码：</span>
+                        <input id="password" name="password" tabindex="2" type="password" value="" autocomplete="off">
+
+                    </div>
+                    <div class="item">
+                        <span>验证码：</span>
+                        <input id="validate" name="validate" tabindex="3" type="text" value="" autocomplete="off">
+
+                    </div>
+                    <input type="hidden" name="lt" value="LT-1223-pepDr0aNJpCd0uccpHLockeURGTNdy">
+                    <input type="hidden" id="key" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQClzeRrFkDBRyAU6zP1TtxOgD8WCK6jZrzcLFk827CCYlxYRmPr0wxmKobOC2+XFn4ikhycegg2U9xl4C6vLVoYIZHJL3+Z2+fibYdqoclP4ejAOnO67XgHPVP+FF0Ckv6Co5Fg+gixFkefIKmtnrmlJMbYnqfMbCLXwbRq/aY3vwIDAQAB">
+                    <input type="hidden" name="execution" value="e6s1">
+                    <input type="hidden" name="_eventId" value="submit">
+                    <div class="item">
+                        <input name="submit" tabindex="4" class="loginbtn_new" type="submit" value="">
+                        <a href="forgetPassword" class="resetpass">忘记密码</a>
+                    </div>
+                </form>
+
+
+
+                <div class="tips">研究生——用户名：学号，初始密码：学号或身份证号<br>
+                    教<span style="color:#fff;">＿</span>师——用户名：工资号或导师代码(见招生简章)，初始密码：身份证号<br>
+                    管理员——用户名及初始密码请咨询研究生院<br>
+                    客服电话：028-61831855 &nbsp;<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2650130266&amp;site=qq&amp;menu=yes"><img border="0" src="images/qq_cn.gif" alt="GMS客服" title="GMS客服"></a><br>
+                    公网用户可访问：<a href="http://public.gms.uestc.edu.cn" style="color:#05f;padding:0 2px;text-decoration:none;">public.gms.uestc.edu.cn</a><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    if(document.getElementById("username")!=null)
+    {
+        generateValidateCode();
+        //设置focus
+        document.getElementById("username").focus();
+        document.getElementById("validate").value="";
+    }
+</script>
+</body></html>

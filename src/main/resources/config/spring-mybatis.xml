@@ -12,7 +12,7 @@
 
     <!-- 扫描services包下所有使用注解的类型 -->
     <context:component-scan base-package="com.system.services"/>
-
+    <context:component-scan base-package="com.system.model"/>
     <!-- 配置数据库相关参数properties的属性：${url} -->
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
