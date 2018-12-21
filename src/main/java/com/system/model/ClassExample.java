@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("classExample")
+@Component
 public class ClassExample {
     protected String orderByClause;
 

@@ -1,41 +1,45 @@
 package com.system.model;
 
+
+import java.sql.Time;
+
 public class Course {
     private Integer course_id;
 
     private String course_name;
 
-    private String course_desc;
-
-    private Integer course_point;
-
     private String course_teacher;
 
-    private String course_during;
+    private String course_week;
 
-    private String course_place;
 
-    private String course_time;
+    private Time course_start_time;
 
-    private String course_hour_credit;
+    private Time course_end_time;
 
-    private String course_checkmethod;
+    private String course_address;
 
-    public Course(Integer course_id, String course_name, String course_desc, Integer course_point, String course_teacher, String course_during, String course_place, String course_time, String course_hour_credit, String course_checkmethod) {
+    public Course(Integer course_id, String course_name, String course_teacher, String course_week, Time course_start_time, Time course_end_time, String course_address) {
         this.course_id = course_id;
         this.course_name = course_name;
-        this.course_desc = course_desc;
-        this.course_point = course_point;
         this.course_teacher = course_teacher;
-        this.course_during = course_during;
-        this.course_place = course_place;
-        this.course_time = course_time;
-        this.course_hour_credit = course_hour_credit;
-        this.course_checkmethod = course_checkmethod;
+        this.course_week = course_week;
+        this.course_start_time = course_start_time;
+        this.course_end_time = course_end_time;
+        this.course_address = course_address;
     }
 
     public Course() {
         super();
+    }
+
+    public Course(String course_name, String course_teacher, String course_week, Time course_start_time, Time course_end_time, String course_address) {
+        this.course_name = course_name;
+        this.course_teacher = course_teacher;
+        this.course_week = course_week;
+        this.course_start_time = course_start_time;
+        this.course_end_time = course_end_time;
+        this.course_address = course_address;
     }
 
     public Integer getCourse_id() {
@@ -54,22 +58,6 @@ public class Course {
         this.course_name = course_name == null ? null : course_name.trim();
     }
 
-    public String getCourse_desc() {
-        return course_desc;
-    }
-
-    public void setCourse_desc(String course_desc) {
-        this.course_desc = course_desc == null ? null : course_desc.trim();
-    }
-
-    public Integer getCourse_point() {
-        return course_point;
-    }
-
-    public void setCourse_point(Integer course_point) {
-        this.course_point = course_point;
-    }
-
     public String getCourse_teacher() {
         return course_teacher;
     }
@@ -78,43 +66,35 @@ public class Course {
         this.course_teacher = course_teacher == null ? null : course_teacher.trim();
     }
 
-    public String getCourse_during() {
-        return course_during;
+    public String getCourse_week() {
+        return course_week;
     }
 
-    public void setCourse_during(String course_during) {
-        this.course_during = course_during == null ? null : course_during.trim();
+    public void setCourse_week(String course_week) {
+        this.course_week = course_week == null ? null : course_week.trim();
     }
 
-    public String getCourse_place() {
-        return course_place;
+    public Time getCourse_start_time() {
+        return course_start_time;
     }
 
-    public void setCourse_place(String course_place) {
-        this.course_place = course_place == null ? null : course_place.trim();
+    public void setCourse_start_time(Time course_start_time) {
+        this.course_start_time = course_start_time;
     }
 
-    public String getCourse_time() {
-        return course_time;
+    public Time getCourse_end_time() {
+        return course_end_time;
     }
 
-    public void setCourse_time(String course_time) {
-        this.course_time = course_time == null ? null : course_time.trim();
+    public void setCourse_end_time(Time course_end_time) {
+        this.course_end_time = course_end_time;
     }
 
-    public String getCourse_hour_credit() {
-        return course_hour_credit;
+    public String getCourse_address() {
+        return course_address;
     }
 
-    public void setCourse_hour_credit(String course_hour_credit) {
-        this.course_hour_credit = course_hour_credit == null ? null : course_hour_credit.trim();
-    }
-
-    public String getCourse_checkmethod() {
-        return course_checkmethod;
-    }
-
-    public void setCourse_checkmethod(String course_checkmethod) {
-        this.course_checkmethod = course_checkmethod == null ? null : course_checkmethod.trim();
+    public void setCourse_address(String course_address) {
+        this.course_address = course_address == null ? null : course_address.trim();
     }
 }

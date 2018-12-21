@@ -1,15 +1,13 @@
 package com.system.model;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-@Component("studentExample")
+@Component
 public class StudentExample {
     protected String orderByClause;
 

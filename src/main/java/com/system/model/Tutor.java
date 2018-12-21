@@ -2,7 +2,9 @@ package com.system.model;
 
 public class Tutor {
     private Integer tutor_id;
+
     private String tutor_name;
+
     private String tutor_psw;
 
     public Tutor(Integer tutor_id, String tutor_name, String tutor_psw) {

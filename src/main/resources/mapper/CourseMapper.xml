@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.CourseMapper">
+<mapper namespace="com.system.dao.interfaces.CourseMapper">
   <resultMap id="BaseResultMap" type="com.system.model.Course">
     <constructor>
       <idArg column="course_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="course_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="course_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="course_point" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="course_teacher" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="course_during" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="course_place" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="course_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="course_hour_credit" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="course_checkmethod" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="course_week" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="course_start_time" javaType="java.sql.Time" jdbcType="TIME" />
+      <arg column="course_end_time" javaType="java.sql.Time" jdbcType="TIME" />
+      <arg column="course_address" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    course_id, course_name, course_desc, course_point, course_teacher, course_during, 
-    course_place, course_time, course_hour_credit, course_checkmethod
+    course_id, course_name, course_teacher, course_week, course_start_time, course_end_time, 
+    course_address
   </sql>
   <select id="selectByExample" parameterType="com.system.model.CourseExample" resultMap="BaseResultMap">
     select
@@ -108,14 +105,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.system.model.Course">
-    insert into course (course_id, course_name, course_desc, 
-      course_point, course_teacher, course_during, 
-      course_place, course_time, course_hour_credit, 
-      course_checkmethod)
-    values (#{course_id,jdbcType=INTEGER}, #{course_name,jdbcType=VARCHAR}, #{course_desc,jdbcType=VARCHAR}, 
-      #{course_point,jdbcType=INTEGER}, #{course_teacher,jdbcType=VARCHAR}, #{course_during,jdbcType=CHAR}, 
-      #{course_place,jdbcType=VARCHAR}, #{course_time,jdbcType=VARCHAR}, #{course_hour_credit,jdbcType=VARCHAR}, 
-      #{course_checkmethod,jdbcType=VARCHAR})
+    insert into course (course_id, course_name, course_teacher, 
+      course_week, course_start_time, course_end_time, 
+      course_address)
+    values (#{course_id,jdbcType=INTEGER}, #{course_name,jdbcType=VARCHAR}, #{course_teacher,jdbcType=VARCHAR}, 
+      #{course_week,jdbcType=VARCHAR}, #{course_start_time,jdbcType=TIME}, #{course_end_time,jdbcType=TIME}, 
+      #{course_address,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.system.model.Course">
     insert into course
@@ -126,29 +121,20 @@
       <if test="course_name != null">
         course_name,
       </if>
-      <if test="course_desc != null">
-        course_desc,
-      </if>
-      <if test="course_point != null">
-        course_point,
-      </if>
       <if test="course_teacher != null">
         course_teacher,
       </if>
-      <if test="course_during != null">
-        course_during,
+      <if test="course_week != null">
+        course_week,
       </if>
-      <if test="course_place != null">
-        course_place,
+      <if test="course_start_time != null">
+        course_start_time,
       </if>
-      <if test="course_time != null">
-        course_time,
+      <if test="course_end_time != null">
+        course_end_time,
       </if>
-      <if test="course_hour_credit != null">
-        course_hour_credit,
-      </if>
-      <if test="course_checkmethod != null">
-        course_checkmethod,
+      <if test="course_address != null">
+        course_address,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -158,29 +144,20 @@
       <if test="course_name != null">
         #{course_name,jdbcType=VARCHAR},
       </if>
-      <if test="course_desc != null">
-        #{course_desc,jdbcType=VARCHAR},
-      </if>
-      <if test="course_point != null">
-        #{course_point,jdbcType=INTEGER},
-      </if>
       <if test="course_teacher != null">
         #{course_teacher,jdbcType=VARCHAR},
       </if>
-      <if test="course_during != null">
-        #{course_during,jdbcType=CHAR},
+      <if test="course_week != null">
+        #{course_week,jdbcType=VARCHAR},
       </if>
-      <if test="course_place != null">
-        #{course_place,jdbcType=VARCHAR},
+      <if test="course_start_time != null">
+        #{course_start_time,jdbcType=TIME},
       </if>
-      <if test="course_time != null">
-        #{course_time,jdbcType=VARCHAR},
+      <if test="course_end_time != null">
+        #{course_end_time,jdbcType=TIME},
       </if>
-      <if test="course_hour_credit != null">
-        #{course_hour_credit,jdbcType=VARCHAR},
-      </if>
-      <if test="course_checkmethod != null">
-        #{course_checkmethod,jdbcType=VARCHAR},
+      <if test="course_address != null">
+        #{course_address,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -199,29 +176,20 @@
       <if test="record.course_name != null">
         course_name = #{record.course_name,jdbcType=VARCHAR},
       </if>
-      <if test="record.course_desc != null">
-        course_desc = #{record.course_desc,jdbcType=VARCHAR},
-      </if>
-      <if test="record.course_point != null">
-        course_point = #{record.course_point,jdbcType=INTEGER},
-      </if>
       <if test="record.course_teacher != null">
         course_teacher = #{record.course_teacher,jdbcType=VARCHAR},
       </if>
-      <if test="record.course_during != null">
-        course_during = #{record.course_during,jdbcType=CHAR},
+      <if test="record.course_week != null">
+        course_week = #{record.course_week,jdbcType=VARCHAR},
       </if>
-      <if test="record.course_place != null">
-        course_place = #{record.course_place,jdbcType=VARCHAR},
+      <if test="record.course_start_time != null">
+        course_start_time = #{record.course_start_time,jdbcType=TIME},
       </if>
-      <if test="record.course_time != null">
-        course_time = #{record.course_time,jdbcType=VARCHAR},
+      <if test="record.course_end_time != null">
+        course_end_time = #{record.course_end_time,jdbcType=TIME},
       </if>
-      <if test="record.course_hour_credit != null">
-        course_hour_credit = #{record.course_hour_credit,jdbcType=VARCHAR},
-      </if>
-      <if test="record.course_checkmethod != null">
-        course_checkmethod = #{record.course_checkmethod,jdbcType=VARCHAR},
+      <if test="record.course_address != null">
+        course_address = #{record.course_address,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -232,14 +200,11 @@
     update course
     set course_id = #{record.course_id,jdbcType=INTEGER},
       course_name = #{record.course_name,jdbcType=VARCHAR},
-      course_desc = #{record.course_desc,jdbcType=VARCHAR},
-      course_point = #{record.course_point,jdbcType=INTEGER},
       course_teacher = #{record.course_teacher,jdbcType=VARCHAR},
-      course_during = #{record.course_during,jdbcType=CHAR},
-      course_place = #{record.course_place,jdbcType=VARCHAR},
-      course_time = #{record.course_time,jdbcType=VARCHAR},
-      course_hour_credit = #{record.course_hour_credit,jdbcType=VARCHAR},
-      course_checkmethod = #{record.course_checkmethod,jdbcType=VARCHAR}
+      course_week = #{record.course_week,jdbcType=VARCHAR},
+      course_start_time = #{record.course_start_time,jdbcType=TIME},
+      course_end_time = #{record.course_end_time,jdbcType=TIME},
+      course_address = #{record.course_address,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -250,29 +215,20 @@
       <if test="course_name != null">
         course_name = #{course_name,jdbcType=VARCHAR},
       </if>
-      <if test="course_desc != null">
-        course_desc = #{course_desc,jdbcType=VARCHAR},
-      </if>
-      <if test="course_point != null">
-        course_point = #{course_point,jdbcType=INTEGER},
-      </if>
       <if test="course_teacher != null">
         course_teacher = #{course_teacher,jdbcType=VARCHAR},
       </if>
-      <if test="course_during != null">
-        course_during = #{course_during,jdbcType=CHAR},
+      <if test="course_week != null">
+        course_week = #{course_week,jdbcType=VARCHAR},
       </if>
-      <if test="course_place != null">
-        course_place = #{course_place,jdbcType=VARCHAR},
+      <if test="course_start_time != null">
+        course_start_time = #{course_start_time,jdbcType=TIME},
       </if>
-      <if test="course_time != null">
-        course_time = #{course_time,jdbcType=VARCHAR},
+      <if test="course_end_time != null">
+        course_end_time = #{course_end_time,jdbcType=TIME},
       </if>
-      <if test="course_hour_credit != null">
-        course_hour_credit = #{course_hour_credit,jdbcType=VARCHAR},
-      </if>
-      <if test="course_checkmethod != null">
-        course_checkmethod = #{course_checkmethod,jdbcType=VARCHAR},
+      <if test="course_address != null">
+        course_address = #{course_address,jdbcType=VARCHAR},
       </if>
     </set>
     where course_id = #{course_id,jdbcType=INTEGER}
@@ -280,14 +236,11 @@
   <update id="updateByPrimaryKey" parameterType="com.system.model.Course">
     update course
     set course_name = #{course_name,jdbcType=VARCHAR},
-      course_desc = #{course_desc,jdbcType=VARCHAR},
-      course_point = #{course_point,jdbcType=INTEGER},
       course_teacher = #{course_teacher,jdbcType=VARCHAR},
-      course_during = #{course_during,jdbcType=CHAR},
-      course_place = #{course_place,jdbcType=VARCHAR},
-      course_time = #{course_time,jdbcType=VARCHAR},
-      course_hour_credit = #{course_hour_credit,jdbcType=VARCHAR},
-      course_checkmethod = #{course_checkmethod,jdbcType=VARCHAR}
+      course_week = #{course_week,jdbcType=VARCHAR},
+      course_start_time = #{course_start_time,jdbcType=TIME},
+      course_end_time = #{course_end_time,jdbcType=TIME},
+      course_address = #{course_address,jdbcType=VARCHAR}
     where course_id = #{course_id,jdbcType=INTEGER}
   </update>
 </mapper>
