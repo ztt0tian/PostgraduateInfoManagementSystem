@@ -34,7 +34,6 @@ public class ClassController {
         modelMap.addAttribute("classes", classService.selectClassesByCondition(classExample));
         return "class/allClass";
     }
-
     @RequestMapping(value = "/classInfo/{class_id}",method = RequestMethod.GET)
     public String getOneClassInfo(Model model, @PathVariable("class_id") Integer class_id) {
         model.addAttribute("theClass", classService.selectClassByPrimaryKey(class_id));

@@ -1,8 +1,6 @@
 package com.system.controller;
 
-import com.system.model.Class;
 import com.system.model.Student;
-import com.system.model.StudentExample;
 import com.system.services.interfaces.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

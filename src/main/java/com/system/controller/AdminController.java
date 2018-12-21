@@ -80,6 +80,21 @@ public class AdminController {
         return "admin/inserSpecialtyInfo";
     }
 
+    @RequestMapping(value = "/specialty/deleteSpecialty")
+    public String DeleteSpecialty(Integer specialty_id) {
+        specialtyExample.clear();
+        specialtyExample.createCriteria().andSpecialty_idEqualTo(specialty_id);
+        specialtyService.deletSpecialtyByCondition(specialtyExample);
+        return "redirect:showAllSpecialty";
+    }
+    @RequestMapping(value = "/specialty/updateSpecialty",method = RequestMethod.POST)
+    public String UpdateSpecialty(Integer update_specialty_id,String new_specialty_name,String new_specialty_desc) {
+        specialtyExample.clear();
+        Specialty specialty = new Specialty(update_specialty_id, new_specialty_name, new_specialty_desc);
+        specialtyExample.createCriteria().andSpecialty_idEqualTo(update_specialty_id);
+        specialtyService.updateSpecialtyByExampleSelective(specialty, specialtyExample);
+        return "redirect:showAllSpecialty";
+    }
     @RequestMapping(value = "/specialty/addSpecialty",method = RequestMethod.POST)
     public String AddSpecialtyInfo(Specialty specialty) {
         specialtyService.inserSpecialty(specialty);
@@ -87,11 +102,11 @@ public class AdminController {
     }
     @RequestMapping(value = "/specialty/showAllSpecialty")
     public String showAllSpecialty(ModelMap modelMap) {
-        studentExample.clear();
+        specialtyExample.clear();
         modelMap.addAttribute("specialties",specialtyService.selectSpecialtyByCondition(specialtyExample));
-        return "admin/allSpecialty";
+        modelMap.addAttribute(new Specialty());
+        return "admin/admin-specialties";
     }
-
     @RequestMapping(value = "/course/showAddCourse")
     public String showAddCourseInfo(Model model) {
         model.addAttribute(new Course());
@@ -116,7 +131,6 @@ public class AdminController {
     @RequestMapping(value = "/course/updateCourse",method = RequestMethod.POST)
     public String UpdateCourse(Integer update_course_id,String new_course_name, String new_course_teacher, String new_course_week, String new_course_start, String new_course_end, String new_course_address) throws ParseException {
         courseExample.clear();
-        System.out.println(update_course_id);
         Course course = new Course(update_course_id, new_course_name,new_course_teacher,new_course_week, StrToTime.ConvertStrToTime(new_course_start), StrToTime.ConvertStrToTime(new_course_end), new_course_address);
         courseExample.createCriteria().andCourse_idEqualTo(update_course_id);
         courseService.updateCourseByExampleSelective(course, courseExample);
@@ -128,7 +142,6 @@ public class AdminController {
         courseService.deletCourseByCondition(courseExample);
         return "redirect:showAllCourse";
     }
-
     @RequestMapping(value = "/course/searchCourse")
     public String SearchCourseByPK(Integer keyword, Model model) {
         model.addAttribute("searchCourse", courseService.selectCourseByPK(keyword));

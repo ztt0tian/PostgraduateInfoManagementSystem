@@ -19,7 +19,6 @@ public class SpecialtyServiceImplTest {
     private ISpecialtyService specialtyService;
 
 
-
     @Test
     public void inserSpecialty() {
         Specialty specialty = new Specialty();
