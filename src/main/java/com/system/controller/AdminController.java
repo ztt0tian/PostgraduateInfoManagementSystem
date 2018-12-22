@@ -62,6 +62,22 @@ public class AdminController {
         model.addAttribute(new Tutor());
         return "admin/inserTutorInfo";
     }
+    @RequestMapping(value = "/tutor/updateTutor",method = RequestMethod.POST)
+    public String UpdateTutor(Integer update_tutor_id,String new_tutor_name,String new_tutor_psw) {
+        tutorExample.clear();
+        Tutor tutor = new Tutor(update_tutor_id, new_tutor_name, new_tutor_psw);
+        tutorExample.createCriteria().andTutor_idEqualTo(update_tutor_id);
+        tutorService.updateTutorByExampleSelective(tutor, tutorExample);
+        return "redirect:showAllTutor";
+    }
+
+    @RequestMapping(value = "/tutor/deleteTutor")
+    public String DeleteTutor(Integer tutor_id) {
+        tutorExample.clear();
+        tutorExample.createCriteria().andTutor_idEqualTo(tutor_id);
+        tutorService.deletTutorByCondition(tutorExample);
+        return "redirect:showAllTutor";
+    }
     @RequestMapping(value = "/tutor/addTutor",method = RequestMethod.POST)
     public String AddTutorInfo(Tutor tutor) {
         tutorService.inserTutor(tutor);
@@ -71,9 +87,9 @@ public class AdminController {
     public String showAllTutor(ModelMap modelMap) {
         tutorExample.clear();
         modelMap.addAttribute("tutors",tutorService.selectByCondition(tutorExample));
-        return "admin/allTutor";
+        modelMap.addAttribute(new Tutor());
+        return "admin/admin-tutors";
     }
-
     @RequestMapping(value = "/specialty/showAddSpecialty")
     public String showAddSpecialtyInfo(Model model) {
         model.addAttribute(new Specialty());
