@@ -18,7 +18,8 @@
     姓名：<sf:input path="name"/>
     密码：<sf:password path="password"/>
     性别：<sf:radiobutton path="sex" value="M" label="男"/><sf:radiobutton path="sex" value="F" label="女"/>
-    班级：<sf:select path="class_id" items="${classes}" itemValue="class_id" itemLabel="class_name"></sf:select>
+    班级：<sf:select path="class_id" items="${classes}"  itemValue="class_id" itemLabel="class_name">
+</sf:select>
     <input type="submit" value="AddStudent"/>
 </sf:form>
 </body>

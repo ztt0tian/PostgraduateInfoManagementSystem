@@ -37,4 +37,10 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+    <jsp-config>
+        <taglib>
+            <taglib-uri>www.zttFunc.com</taglib-uri>
+            <taglib-location>/WEB-INF/tld/function.tld</taglib-location>
+        </taglib>
+    </jsp-config>
 </web-app>

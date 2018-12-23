@@ -55,9 +55,9 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">课程管理</a></li>
+                <li><a href="/admin/course/showAllCourse">课程管理</a></li>
                 <li><a href="/admin/student/showAllStudent">学生管理</a></li>
-                <li><a href="/admin/class/showAllClass">班级管理</a></li>
+                <li class="active"><a href="#">班级管理</a></li>
                 <li><a href="/admin/tutor/showAllTutor">导师管理</a></li>
                 <li><a href="/admin/specialty/showAllSpecialty">专业管理</a></li>
                 <li><a href="#contact">奖罚管理</a></li>
@@ -80,31 +80,21 @@
 <br>
 <div class="container theme-showcase" role="main">
     <div class="page-header">
-        <h1 style="display: inline-block">所有课程&nbsp;&nbsp;&nbsp;<a data-toggle="modal" data-target="#newCourse" href="#" title="添加课程"><img src="/images/add.png"></a></h1>
-        <div class="modal fade" id="newCourse" tabindex="-1" role="dialog" aria-labelledby="courseInfo" aria-hidden="true">
+        <h1 style="display: inline-block">所有班级&nbsp;&nbsp;&nbsp;<a data-toggle="modal" data-target="#newClass" href="#" title="添加班级"><img src="/images/add.png"></a></h1>
+        <div class="modal fade" id="newClass" tabindex="-1" role="dialog" aria-labelledby="courseInfo" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">新建课程信息</h4>
+                        <h4 class="modal-title">新建班级信息</h4>
                     </div>
                     <div class="modal-body">
-                        <sf:form commandName="course" method="post" action="/admin/course/addCourse">
+                        <sf:form commandName="class" method="post" action="/admin/class/addClass">
                             <div class="form-group">
-                                <label>课程ID</label>
-                                <sf:input path="course_id" cssClass="form-control"/>
-                                <label>课程名称</label>
-                                <sf:input path="course_name" cssClass="form-control"/>
-                                <label>任课老师</label>
-                                <sf:input path="course_teacher" cssClass="form-control"/>
-                                <label>起止周</label>
-                                <sf:input path="course_week" cssClass="form-control"/>
-                                <label>上课时间</label>
-                                <input type="text" class="form-control" name="start_time"/>
-                                <label>下课时间</label>
-                                <input type="text" class="form-control" name="end_time"/>
-                                <label>上课地点</label>
-                                <sf:input path="course_address" cssClass="form-control"/>
+                                <label>班级名称</label>
+                                <sf:input path="class_name" cssClass="form-control"/>
+                                <label>班级人数</label>
+                                <sf:input path="class_nums" cssClass="form-control" value="0"/>
                             </div>
                             <div class="form-group">
                                 <button type="reset" class="btn btn-default">重置</button>
@@ -117,9 +107,9 @@
         </div>
         <div class="navbar-right col-sm-4" id="so" style="margin-top: 1.5em">
             <div class="input-group">
-            <form class="searchForm" id="search-form" action="/admin/course/searchCourse">
-                <input type="text" class="form-control" placeholder="课程号查询" name="keyword" id="search-kw"/>
-            </form>
+                <form class="searchForm" id="search-form" action="#">
+                    <input type="text" class="form-control" placeholder="班级查询" name="keyword" id="search-kw"/>
+                </form>
                 <span class="input-group-addon"><a href="javascript:void(0);" onclick="searchByKW()" id="search-course"><i class="glyphicon glyphicon-search"><span >搜索</span></i></a></span>
             </div>
         </div>
@@ -130,62 +120,40 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>课程编号</th>
-                    <th>课程名称</th>
-                    <th>任课老师</th>
-                    <th>起止周</th>
-                    <th>上课时间</th>
-                    <th>上课地点</th>
+                    <th>班级ID</th>
+                    <th>班级名称</th>
+                    <th>班级人数</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${courses}" var="cour" varStatus="st">
+                <c:forEach items="${classes}" var="cla" varStatus="st">
                     <tr>
                         <td>${st.index+1}</td>
-                        <td>${cour.course_id}</td>
-                        <td>${cour.course_name}</td>
-                        <td>${cour.course_teacher}</td>
-                        <td>${cour.course_week}</td>
-                        <td>${cour.course_start_time}--${cour.course_end_time}</td>
-                        <td>${cour.course_address}</td>
-                        <td><a data-toggle="modal" data-target="#${cour.course_id}"><img src="/images/modify.png"></a><a href="/admin/course/deleteCourse?course_id=${cour.course_id}"><img src="/images/delete.png"></a></td>
-                        <div class="modal fade" id="${cour.course_id}" tabindex="-1" role="dialog" aria-labelledby="courseInfo" aria-hidden="true">
+                        <td>${cla.class_id}</td>
+                        <td>${cla.class_name}</td>
+                        <td>${cla.class_nums}</td>
+                        <td><a data-toggle="modal" data-target="#${cla.class_id}"><img src="/images/modify.png"></a><a href="/admin/class/deleteClass?class_id=${cla.class_id}"><img src="/images/delete.png"></a></td>
+                        <div class="modal fade" id="${cla.class_id}" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title">更新课程信息</h4>
+                                        <h4 class="modal-title">更新班级信息</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="CourseInfoForm" role="form" action="/admin/course/updateCourse" method="post">
+                                        <form class="ClassInfoForm" role="form" action="/admin/class/updateClass" method="post">
                                             <div class="form-group">
-                                                <label>课程ID</label>
-                                                <input type="number" name="update_course_id" class="form-control"  readonly="readonly" value="${cour.course_id}">
+                                                <label>班级ID</label>
+                                                <input type="number" name="update_class_id" class="form-control"  readonly="readonly" value="${cla.class_id}">
                                             </div>
                                             <div class="form-group">
-                                                <label>课程名称</label>
-                                                <input type="text" name="new_course_name" class="form-control" value="${cour.course_name}" required>
+                                                <label>班级名称</label>
+                                                <input type="text" name="new_class_name" class="form-control" value="${cla.class_name}" required>
                                             </div>
                                             <div class="form-group">
-                                                <label>任课老师</label>
-                                                <input type="text" name="new_course_teacher" class="form-control" value="${cour.course_teacher}" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>起止周</label>
-                                                <input type="text" name="new_course_week" class="form-control" value="${cour.course_week}" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>上课时间</label>
-                                                <input type="text" name="new_course_start" class="form-control" value="${cour.course_start_time}" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>下课时间</label>
-                                                <input type="text" name="new_course_end" class="form-control" value="${cour.course_end_time}" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>上课地点</label>
-                                                <input type="text" name="new_course_address" class="form-control" value="${cour.course_address}" required>
+                                                <label>班级人数</label>
+                                                <input type="text" name="new_class_nums" class="form-control" readonly value="${cla.class_nums}">
                                             </div>
                                             <div class="form-group">
                                                 <button type="reset" class="btn btn-default">重置</button>

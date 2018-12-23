@@ -37,4 +37,13 @@ public class StudentServiceImpl implements IStudentService {
     public List<Student> selectClassesByCondition(StudentExample example) {
         return sqlSessionFactory.openSession().getMapper(StudentMapper.class).selectByExample(studentExample);
     }
+
+    public int updateStudentByExampleSelective(Student student, StudentExample studentExample) {
+        return sqlSessionFactory.openSession().getMapper(StudentMapper.class).updateByExample(student, studentExample);
+    }
+
+    public int deleteStudentByPK(Integer student_id) {
+        return sqlSessionFactory.openSession().getMapper(StudentMapper.class).deleteByPrimaryKey(student_id);
+    }
+
 }

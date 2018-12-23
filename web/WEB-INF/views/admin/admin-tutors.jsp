@@ -56,8 +56,8 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/admin/course/showAllCourse">课程管理</a></li>
-                <li><a href="#about">学生管理</a></li>
-                <li><a href="#contact">班级管理</a></li>
+                <li><a href="/admin/student/showAllStudent">学生管理</a></li>
+                <li><a href="/admin/class/showAllClass">班级管理</a></li>
                 <li class="active"><a href="#">导师管理</a></li>
                 <li><a href="/admin/specialty/showAllSpecialty">专业管理</a></li>
                 <li><a href="#contact">奖罚管理</a></li>

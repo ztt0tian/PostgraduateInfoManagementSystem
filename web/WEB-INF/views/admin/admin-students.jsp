@@ -5,10 +5,15 @@
   Time: 19:41
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
-
+<%@ page contentType="text/html;charset=UTF-8" import="com.system.services.*" language="java" %>
+<%@ page import="com.system.services.interfaces.IClassService" %>
+<%@ page import="com.system.services.impl.ClassServiceImpl" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+    IClassService classService = new ClassServiceImpl();
+%>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -29,7 +34,8 @@
     <!-- Custom styles for this template -->
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!--[if lt IE 9]>
+    <script src="/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="/js/ie-emulation-modes-warning.js"></script>
     <script src="/js/admin-course.js"></script>
 
@@ -45,7 +51,8 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -56,16 +63,17 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/admin/course/showAllCourse">课程管理</a></li>
-                <li><a href="#about">学生管理</a></li>
-                <li><a href="#contact">班级管理</a></li>
-                <li><a href="#contact">导师管理</a></li>
-                <li class="active"><a href="/admin/specialty/showAllSpecialty">专业管理</a></li>
+                <li class="active"><a href="#about">学生管理</a></li>
+                <li><a href="/admin/class/showAllClass">班级管理</a></li>
+                <li><a href="/admin/tutor/showAllTutor">导师管理</a></li>
+                <li><a href="/admin/specialty/showAllSpecialty">专业管理</a></li>
                 <li><a href="#contact">奖罚管理</a></li>
             </ul>
             <div class="collapse navbar-collapse pull-right">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">你的名字 <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">你的名字 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">修改信息</a></li>
                             <li><a href="#">切换账号</a></li>
@@ -80,24 +88,27 @@
 <br>
 <div class="container theme-showcase" role="main">
     <div class="page-header">
-        <h1 style="display: inline-block">所有专业&nbsp;&nbsp;&nbsp;<a data-toggle="modal" data-target="#newSpecialty" href="#" title="添加专业"><img src="/images/add.png"></a></h1>
-        <div class="modal fade" id="newSpecialty" tabindex="-1" role="dialog" aria-labelledby="courseInfo" aria-hidden="true">
+        <h1 style="display: inline-block">所有学生&nbsp;&nbsp;&nbsp;<a data-toggle="modal" data-target="#newStudent"
+                                                                   href="#" title="添加学生"><img src="/images/add.png"></a>
+        </h1>
+        <div class="modal fade" id="newStudent" tabindex="-1" role="dialog" aria-labelledby="studentInfo"
+             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">新建课程信息</h4>
+                        <h4 class="modal-title">新建学生信息</h4>
                     </div>
                     <div class="modal-body">
-                        <sf:form commandName="specialty" method="post" action="/admin/specialty/addSpecialty">
+                        <%--@elvariable id="student" type=""--%>
+                        <sf:form commandName="student" method="post" action="/admin/student/addStudent">
                             <div class="form-group">
-                                <label>专业ID</label>
-                                <sf:input path="specialty_id" cssClass="form-control"/>
-                                <label>专业名称</label>
-                                <sf:input path="specialty_name" cssClass="form-control"/>
-                                <label>专业简介</label>
-                                <sf:input path="specialty_desc" cssClass="form-control"/>
-
+                                <label>学生编号</label>
+                                <sf:input path="student_id" cssClass="form-control"/>
+                                <label>学生姓名</label>
+                                <sf:input path="name" cssClass="form-control"/>
+                                <label>学生密码</label>
+                                <sf:input path="password" cssClass="form-control" value="123456"/>
                             </div>
                             <div class="form-group">
                                 <button type="reset" class="btn btn-default">重置</button>
@@ -111,9 +122,10 @@
         <div class="navbar-right col-sm-4" id="so" style="margin-top: 1.5em">
             <div class="input-group">
                 <form class="searchForm" id="search-form" action="#">
-                    <input type="text" class="form-control" placeholder="专业查询" name="keyword" id="search-kw"/>
+                    <input type="text" class="form-control" placeholder="学生查询" name="keyword" id="search-kw"/>
                 </form>
-                <span class="input-group-addon"><a href="javascript:void(0);" onclick="searchByKW()" id="search-course"><i class="glyphicon glyphicon-search"><span >搜索</span></i></a></span>
+                <span class="input-group-addon"><a href="javascript:void(0);" onclick="searchByKW()" id="search-course"><i
+                        class="glyphicon glyphicon-search"><span>搜索</span></i></a></span>
             </div>
         </div>
     </div>
@@ -123,40 +135,128 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>专业ID</th>
-                    <th>专业名称</th>
-                    <th>专业介绍</th>
+                    <th>学生ID</th>
+                    <th>姓名</th>
+                    <th>密码</th>
+                    <th>性别</th>
+                    <th>生日</th>
+                    <th>手机号</th>
+                    <th>地址</th>
+                    <th>导师</th>
+                    <th>班级</th>
+                    <th>专业</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${specialties}" var="sepc" varStatus="st">
+                <c:forEach items="${students}" var="stu" varStatus="st">
                     <tr>
                         <td>${st.index+1}</td>
-                        <td>${sepc.specialty_id}</td>
-                        <td>${sepc.specialty_name}</td>
-                        <td>${sepc.specialty_desc}</td>
-                        <td><a data-toggle="modal" data-target="#${sepc.specialty_id}"><img src="/images/modify.png"></a><a href="/admin/specialty/deleteSpecialty?specialty_id=${sepc.specialty_id}"><img src="/images/delete.png"></a></td>
-                        <div class="modal fade" id="${sepc.specialty_id}" tabindex="-1" role="dialog" aria-labelledby="courseInfo" aria-hidden="true">
+                        <td>${stu.student_id}</td>
+                        <td>${stu.name}</td>
+                        <td>${stu.password}</td>
+                        <td>${stu.sex}</td>
+                        <td><fmt:formatDate value='${stu.birthday}' pattern='yyyy-MM-dd '/></td>
+                        <td>${stu.phonenumber}</td>
+                        <td>${stu.address}</td>
+                        <td><c:forEach items="${tutors}" var="tuto">
+                            <c:if test="${tuto.tutor_id==stu.tutor_id}">
+                                ${tuto.tutor_name}
+                            </c:if>
+                        </c:forEach></td><td><c:forEach items="${classes}" var="clas">
+                            <c:if test="${clas.class_id==stu.class_id}">
+                                ${clas.class_name}
+                            </c:if>
+                        </c:forEach></td>
+                        <td><c:forEach items="${specialties}" var="speca">
+                            <c:if test="${speca.specialty_id==stu.specialty_id}">
+                                ${speca.specialty_name}
+                            </c:if>
+                        </c:forEach></td>
+                        <td><a data-toggle="modal" data-target="#${stu.student_id}"><img src="/images/modify.png"></a><a
+                                href="/admin/student/deleteStudent?student_id=${stu.student_id}"><img
+                                src="/images/delete.png"></a></td>
+                        <div class="modal fade" id="${stu.student_id}" tabindex="-1" role="dialog"
+                             aria-labelledby="courseInfo" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title">更新专业信息</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <h4 class="modal-title">更新学生信息</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="SpecialtyInfoForm" role="form" action="/admin/specialty/updateSpecialty" method="post">
+                                        <form class="StudentInfoForm" role="form" action="/admin/student/updateStudent" method="post">
                                             <div class="form-group">
-                                                <label>专业ID</label>
-                                                <input type="number" name="update_specialty_id" class="form-control"  readonly="readonly" value="${sepc.specialty_id}">
+                                                <label>学生学号</label>
+                                                <input type="number" name="update_stu_id" class="form-control"  readonly="readonly" value="${stu.student_id}">
                                             </div>
                                             <div class="form-group">
-                                                <label>专业名称</label>
-                                                <input type="text" name="new_specialty_name" class="form-control" value="${sepc.specialty_name}" required>
+                                                <label>学生姓名</label>
+                                                <input type="text" name="new_stu_name" class="form-control" value="${stu.name}" required>
                                             </div>
                                             <div class="form-group">
-                                                <label>专业介绍</label>
-                                                <input type="text" name="new_specialty_desc" class="form-control" value="${sepc.specialty_desc}">
+                                                <label>账户密码</label>
+                                                <input type="text" name="new_stu_psw" class="form-control" value="${stu.password}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>性别</label>
+                                                <input type="text" name="new_stu_sex" class="form-control" value="${stu.sex}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>生日</label>
+                                                <input type="date"  name="new_stu_birthday" class="form-control" value=<fmt:formatDate value='${stu.birthday}' pattern='yyyy-MM-dd '/>/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>手机号</label>
+                                                <input type="text" name="new_stu_phonenumber" class="form-control" value="${stu.phonenumber}">
+                                            </div><div class="form-group">
+                                            <label>地址</label>
+                                            <input type="text" name="new_stu_address" class="form-control" value="${stu.address}">
+                                        </div>
+
+                                            <div class="form-group">
+                                                <label>班级</label>
+                                                <select id="new_stu_class" name="new_stu_class" class="form-control">
+                                                    <option value="">--还未选择班级--</option>
+                                                    <c:forEach items="${classes}" var="cla" varStatus="st">
+                                                        <c:if test="${cla.class_id == stu.class_id}">
+                                                            <option class="form-control" value="${cla.class_id}" selected="selected">${cla.class_name}</option>
+                                                        </c:if>
+                                                        <c:if test="${cla.class_id != stu.class_id}">
+                                                            <option class="form-control" value="${cla.class_id}">${cla.class_name}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>导师</label>
+                                                <select id="new_stu_tutor" name="new_stu_tutor" class="form-control">
+                                                    <option value="">--还未选择导师--</option>
+                                                    <c:forEach items="${tutors}" var="tur" varStatus="st">
+                                                        <c:if test="${tur.tutor_id == stu.tutor_id}">
+                                                            <option class="form-control" value="${tur.tutor_id}" selected="selected">${tur.tutor_name}</option>
+                                                        </c:if>
+                                                        <c:if test="${tur.tutor_id!=stu.tutor_id}">
+                                                            <option class="form-control" value="${tur.tutor_id}">${tur.tutor_name}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>专业</label>
+                                                <select id="new_stu_specialty" name="new_stu_specialty" class="form-control">
+                                                    <option value="">--还未选择专业--</option>
+                                                    <c:forEach items="${specialties}" var="special" varStatus="st">
+                                                        <c:if test="${special.specialty_id == stu.specialty_id}">
+                                                            <option class="form-control" value="${special.specialty_id}" selected="selected">${special.specialty_name}</option>
+                                                        </c:if>
+                                                        <c:if test="${special.specialty_id!=stu.specialty_id}">
+                                                            <option class="form-control" value="${special.specialty_id}">${special.specialty_name}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <button type="reset" class="btn btn-default">重置</button>
