@@ -6,14 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
-<%@ page contentType="text/html;charset=UTF-8" import="com.system.services.*" language="java" %>
-<%@ page import="com.system.services.interfaces.IClassService" %>
-<%@ page import="com.system.services.impl.ClassServiceImpl" %>
+<%@ page contentType="text/html;charset=UTF-8"  language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%
-    IClassService classService = new ClassServiceImpl();
-%>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -38,6 +33,8 @@
     <script src="/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="/js/ie-emulation-modes-warning.js"></script>
     <script src="/js/admin-course.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap-select.min.css">
+    <script src="/js/bootstrap-select.min.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -67,7 +64,7 @@
                 <li><a href="/admin/class/showAllClass">班级管理</a></li>
                 <li><a href="/admin/tutor/showAllTutor">导师管理</a></li>
                 <li><a href="/admin/specialty/showAllSpecialty">专业管理</a></li>
-                <li><a href="#contact">奖罚管理</a></li>
+                <li><a href="/admin/rprecordmanage/showAllRPrecord">奖罚管理</a></li>
             </ul>
             <div class="collapse navbar-collapse pull-right">
                 <ul class="nav navbar-nav">
@@ -121,7 +118,7 @@
         </div>
         <div class="navbar-right col-sm-4" id="so" style="margin-top: 1.5em">
             <div class="input-group">
-                <form class="searchForm" id="search-form" action="#">
+                <form class="searchForm" id="search-form" action="/admin/student/searchStudent" method="post">
                     <input type="text" class="form-control" placeholder="学生查询" name="keyword" id="search-kw"/>
                 </form>
                 <span class="input-group-addon"><a href="javascript:void(0);" onclick="searchByKW()" id="search-course"><i
@@ -163,7 +160,8 @@
                             <c:if test="${tuto.tutor_id==stu.tutor_id}">
                                 ${tuto.tutor_name}
                             </c:if>
-                        </c:forEach></td><td><c:forEach items="${classes}" var="clas">
+                        </c:forEach></td>
+                        <td><c:forEach items="${classes}" var="clas">
                             <c:if test="${clas.class_id==stu.class_id}">
                                 ${clas.class_name}
                             </c:if>
@@ -218,7 +216,7 @@
 
                                             <div class="form-group">
                                                 <label>班级</label>
-                                                <select id="new_stu_class" name="new_stu_class" class="form-control">
+                                                <select id="new_stu_class" name="new_stu_class" class="form-control" data-live-search="true">
                                                     <option value="">--还未选择班级--</option>
                                                     <c:forEach items="${classes}" var="cla" varStatus="st">
                                                         <c:if test="${cla.class_id == stu.class_id}">

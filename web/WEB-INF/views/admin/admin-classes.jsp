@@ -60,7 +60,7 @@
                 <li class="active"><a href="#">班级管理</a></li>
                 <li><a href="/admin/tutor/showAllTutor">导师管理</a></li>
                 <li><a href="/admin/specialty/showAllSpecialty">专业管理</a></li>
-                <li><a href="#contact">奖罚管理</a></li>
+                <li><a href="/admin/rprecordmanage/showAllRPrecord">奖罚管理</a></li>
             </ul>
             <div class="collapse navbar-collapse pull-right">
                 <ul class="nav navbar-nav">

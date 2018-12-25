@@ -11,8 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -39,11 +43,33 @@ public class AdminController {
     private CourseExample courseExample;
     @Autowired
     private ICourseService courseService;
-
+    @Autowired
+    private RewardPunishExample rewardPunishExample;
+    @Autowired
+    private IRewardPunishService rewardPunishService;
+    @Autowired
+    private TermExample termExample;
+    @Autowired
+    private ITermSerivice termSerivice;
+    @Autowired
+    private RewardPunishRecordExample rewardPunishRecordExample;
+    @Autowired
+    private IRewardPunishRecordService rewardPunishRecordService;
     @RequestMapping(value = "/student/addStudent", method = RequestMethod.POST)
     public String AddStudentInfo(Student student) {
         adminService.AddStudentInfo(student);
         return "redirect:showAllStudent";
+    }
+    @RequestMapping(value = "/student/searchStudent",method = RequestMethod.POST)
+    public String SearchStudentByPK(Integer keyword, Model model) { studentExample.clear();
+        classExample.clear();
+        tutorExample.clear();
+        specialtyExample.clear();
+        model.addAttribute("classes", classService.selectClassesByCondition(classExample));
+        model.addAttribute("tutors", tutorService.selectByCondition(tutorExample));
+        model.addAttribute("specialties", specialtyService.selectSpecialtyByCondition(specialtyExample));
+        model.addAttribute("searchStudent", studentService.selectStudentByPK(keyword));
+        return "admin/search-student-result";
     }
     @RequestMapping(value = "/student/deleteStudent")
     public String DeleteStudent(Integer student_id) {
@@ -239,4 +265,82 @@ public class AdminController {
         model.addAttribute("searchCourse", courseService.selectCourseByPK(keyword));
         return "admin/search-course-result";
     }
+    @RequestMapping(value = "/rpmanage/showAllRP")
+    public String showAllRP(ModelMap modelMap) {
+        rewardPunishExample.clear();
+        modelMap.addAttribute("rpes", rewardPunishService.selectRewardPunishByCondition(rewardPunishExample));
+        modelMap.addAttribute(new RewardPunish());
+        return "admin/admin-r-p-2";
+    }
+    @RequestMapping(value = "/rpmanage/addRP")
+    public String addRP(RewardPunish rewardPunish) {
+        rewardPunishService.insertRP(rewardPunish);
+        return "redirect:showAllRP";
+    }
+
+    @RequestMapping("/term/showAllTerm")
+    public String showAllTerm(ModelMap modelMap) {
+        termExample.clear();
+        modelMap.addAttribute("terms", termSerivice.selectTermByCondition(termExample));
+        modelMap.addAttribute(new Term());
+        return "admin/admin-terms";
+    }
+    @RequestMapping("/term/deleteTerm")
+    public String deleteTerm(Integer term_id) {
+        termSerivice.deleteTermByPK(term_id);
+        return "redirect:showAllTerm";
+    }
+    @RequestMapping(value = "/term/addTerm",method = RequestMethod.POST)
+    public String addTerm(Term term) {
+        termSerivice.insertTerm(term);
+        return "redirect:showAllTerm";
+    }
+    @RequestMapping(value = "/rprecordmanage/addRPrecord",method = RequestMethod.POST)
+    public String addRPrecord(RewardPunishRecord rewardPunishRecord,String rprecord_date) throws ParseException {
+        rewardPunishRecord.setRp_record_date(FormatDate.StringToDate(rprecord_date));
+        rewardPunishRecordService.insertRPrecord(rewardPunishRecord);
+        return "redirect:showAllRPrecord";
+    }
+    @RequestMapping(value = "/rprecordmanage/showAllRPrecord")
+    public String showAllRPrecord(ModelMap modelMap) {
+        rewardPunishRecordExample.clear();
+        studentExample.clear();
+        termExample.clear();
+        rewardPunishExample.clear();
+        modelMap.addAttribute("RPrecords", rewardPunishRecordService.selectRPrecordByCondition(rewardPunishRecordExample));
+        modelMap.addAttribute("students", studentService.selectClassesByCondition(studentExample));
+        modelMap.addAttribute("terms", termSerivice.selectTermByCondition(termExample));
+        modelMap.addAttribute("rpes", rewardPunishService.selectRewardPunishByCondition(rewardPunishExample));
+        modelMap.addAttribute(new RewardPunishRecord());//用于新建奖惩项记录
+        return "admin/admin-r-p-1";
+    }
+    @RequestMapping(value = "/rprecordmanage/deleteRPrecord")
+    public String deleteRPrecord(Integer rp_record_id) {
+        rewardPunishRecordExample.clear();
+        rewardPunishRecordExample.createCriteria().andReward_punish_idEqualTo(rp_record_id);
+        rewardPunishRecordService.deletRPrecordByCondition(rewardPunishRecordExample);
+        return "redirect:showAllRPrecord";
+    }
+
+    @RequestMapping(value = "/rprecordmanage/statistics")
+    public String showRPStatistics() {
+        return "admin/admin-r-p-statistics-copy";
+    }
+
+    @RequestMapping(value = "rprecordmanage/getJsonData", method = RequestMethod.POST)
+    @ResponseBody
+    public List<JsonDataOfClassRPrecord> getAllClassesRPrecords() {
+        List<JsonDataOfClassRPrecord> jsonDataOfClassRPrecords = new ArrayList<JsonDataOfClassRPrecord>();
+        classExample.clear();
+        rewardPunishRecordExample.clear();
+        List<Class> classes = classService.selectClassesByCondition(classExample);
+        for (Class cla:classes) {
+            studentExample.clear();
+        }
+        jsonDataOfClassRPrecords.add(new JsonDataOfClassRPrecord("一班", 10, 20));
+        jsonDataOfClassRPrecords.add(new JsonDataOfClassRPrecord("二班", 20, 40));
+        jsonDataOfClassRPrecords.add(new JsonDataOfClassRPrecord("三班", 23, 45));
+        return jsonDataOfClassRPrecords;
+    }
+
 }
