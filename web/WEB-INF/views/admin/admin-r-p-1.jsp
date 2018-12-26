@@ -19,7 +19,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/images/favicon.ico">
-    <title>Starter Template for Bootstrap</title>
+    <title>奖惩记录</title>
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -50,7 +50,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">GMS</a>
+            <a class="navbar-brand">GMS</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -59,16 +59,16 @@
                 <li><a href="/admin/class/showAllClass">班级管理</a></li>
                 <li><a href="/admin/tutor/showAllTutor">导师管理</a></li>
                 <li><a href="/admin/specialty/showAllSpecialty">专业管理</a></li>
-                <li><a href="#">奖罚管理</a></li>
+                <li><a href="/admin/rprecordmanage/showAllRPrecord">奖罚管理</a></li>
             </ul>
             <div class="collapse navbar-collapse pull-right">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">你的名字 <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${sessionScope.login_admin.admin_name} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">修改信息</a></li>
                             <li><a href="#">切换账号</a></li>
-                            <li><a href="#">退出</a></li>
+                            <li><a href="/admin/exit">退出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -119,9 +119,10 @@
     </div>
     <div class="container col-lg-12">
         <ul class="nav nav-pills nav-stacked col-lg-3">
-            <li role="presentation" class="active"><a href="#">奖惩记录</a></li>
+            <li role="presentation" class="active"><a href="/admin/rprecordmanage/showAllRPrecord">奖惩记录</a></li>
             <li role="presentation"><a href="/admin/rpmanage/showAllRP">奖惩项设置</a></li>
             <li role="presentation"><a href="/admin/term/showAllTerm">学期添加</a></li>
+            <li role="presentation"><a href="/admin/rprecordmanage/statistics">统计分析</a></li>
         </ul>
         <div class="row col-lg-9">
             <div class="col-md-12">

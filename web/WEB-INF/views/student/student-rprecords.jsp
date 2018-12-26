@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: Lab1203-1
@@ -23,7 +25,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/images/favicon.ico">
-    <title>登录</title>
+    <title>我的奖惩</title>
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <script src="/js/ie-emulation-modes-warning.js"></script>
@@ -79,55 +81,39 @@
         </div>
     </div>
 </nav>
-
 <div class="container">
-
-    <div class="starter-template">
-
-        <br>  <br>
-        <div class="row">
-
-            <div class="col-lg-4 col-sm-4">
-                <a href="/student/${sessionScope.login_student.student_id}/myRPrecord" target="_blank">
-                <div class="content">
-                    <div class="title-icon">
-                <span class="lazy-loaded over" style="padding-top: 56.25%;">
-                  <img data-original="/images/myhuawei6.png" class="lazy img-responsive" src="/images/myhuawei6.png"></span>
-                    </div>
-                    <h3>
-                        奖惩情况
-                    </h3>
-                </div>
-                </a>
-            </div>
-            <div class="col-lg-4 col-sm-4">
-                <a href="/student/${sessionScope.login_student.student_id}/myInfo" target="_blank">
-                <div class="content">
-                    <div class="title-icon">
-                <span class="lazy-loaded over" style="padding-top: 56.25%;">
-                  <img data-original="/images/myhuawei1.png"
-                       class="lazy img-responsive" src="/images/myhuawei1.png"></span>
-                    </div>
-                    <h3>
-                        个人信息
-                    </h3>
-                </div>
-                </a>
-            </div>
-            <div class="col-lg-4 col-sm-4">
-                <a href="/student/${sessionScope.login_student.student_id}/myCourse" target="_blank">
-                <div class="content">
-                    <div class="title-icon">
-                <span class="lazy-loaded over" style="padding-top: 56.25%;">
-                  <img data-original="/images/myhuawei2.png" class="lazy img-responsive" src="/images/myhuawei2.png"></span>
-                    </div>
-                    <h3>
-                        我的课程
-                    </h3>
-                </div>
-                </a>
-            </div>
-        </div>
+    <div class="row col-lg-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>奖惩名称</th>
+                    <th>奖惩金额</th>
+                    <th>所处学期</th>
+                    <th>奖惩日期</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${records}" var="rpre" varStatus="sta">
+                    <tr>
+                        <td>${sta.index+1}</td>
+                        <c:forEach items="${rpes}" var="rp">
+                            <c:if test="${rp.reward_punish_id==rpre.reward_punish_id}">
+                            <td>${rp.reward_punish_name}</td>
+                            <td>${rp.reward_punish_money}</td>
+                            </c:if>
+                        </c:forEach>
+                        <td><c:forEach items="${terms}" var="term">
+                            <c:if test="${term.term_id==rpre.term_id}">
+                                ${term.trem_name}
+                            </c:if>
+                        </c:forEach>
+                        </td>
+                        <td><fmt:formatDate value='${rpre.rp_record_date}' pattern='yyyy-MM-dd '/></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
     </div>
 </div><!-- /.container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

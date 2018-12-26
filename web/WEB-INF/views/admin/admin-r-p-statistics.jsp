@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/images/favicon.ico">
-    <title>Starter Template for Bootstrap</title>
+    <title>各班奖惩统计情况</title>
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -53,7 +53,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">GMS</a>
+            <a class="navbar-brand">GMS</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -62,13 +62,13 @@
                 <li><a href="/admin/class/showAllClass">班级管理</a></li>
                 <li><a href="/admin/tutor/showAllTutor">导师管理</a></li>
                 <li><a href="/admin/specialty/showAllSpecialty">专业管理</a></li>
-                <li class="active"><a href="#">奖罚管理</a></li>
+                <li class="active"><a href="/admin/rprecordmanage/showAllRPrecord">奖罚管理</a></li>
             </ul>
             <div class="collapse navbar-collapse pull-right">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">你的名字 <span class="caret"></span></a>
+                           aria-expanded="false">${sessionScope.login_admin.admin_name}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">修改信息</a></li>
                             <li><a href="#">切换账号</a></li>
@@ -120,117 +120,139 @@
                     // 基于准备好的dom，初始化echarts图表
                     var myChart = ec.init(document.getElementById('main'));
                     var dataClasses = [];//x轴
-                    var dateRPcount = [];//y轴
+                    var dateRPcount = [0,10,20,30,40,50];//y轴
                     var dateofClassR = [];//各班奖记录
                     var dateofClassP = [];//各班惩记录
                     //总计
-                    var data3 = function() {
-                        var datas = [];
-                        for (var i = 0; i < dateofClassR.length; i++) {
-                            datas.push(dateofClassP[i] + dateofClassR[i]);
+                    myChart.showLoading();    //数据加载完之前先显示一段简单的loading动画
+                    $.ajax({
+                        type: 'post',
+                        async : true,
+                        url : "/admin/rprecordmanage/getJsonData",
+                        data : {},
+                        dataType : "json",
+                        success : function(result) {
+                            //请求成功时执行该函数内容，result即为服务器返回的json对象
+                            if (result) {
+                                for(var i=0;i<result.length;i++){
+                                    dataClasses.push(result[i].class_name);    //挨个取出班级并填入班级数组
+                                    dateofClassR.push(result[i].class_R_count);
+                                    dateofClassP.push(result[i].class_P_count);
+                                }
+                                var data3 = function() {
+                                    var datas = [];
+                                    for (var i = 0; i < dateofClassR.length; i++) {
+                                        datas.push(dateofClassR[i]+dateofClassP[i]);
+                                    }
+                                    return datas;
+                                }();
+                                myChart.hideLoading();    //隐藏加载动画
+                                myChart.setOption({
+                                    title:{
+                                        text: '各班奖惩统计',
+                                        left: 'center',
+                                        top: 'top',
+                                    },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        axisPointer: {
+                                            type: 'shadow'
+                                        }
+                                    },
+                                    legend: {
+                                        orient:'horizontal',
+                                        x: 'center',
+                                        y: 'top',
+                                        data:['惩','奖']
+                                    },
+                                    grid: {
+                                        left: '3%',
+                                        right: '4%',
+                                        bottom: '3%',
+                                        containLabel: true
+                                    },
+                                    xAxis : [
+                                        {
+                                            type : 'category',
+                                            data: dataClasses,
+                                        }
+                                    ],
+                                    yAxis : [
+                                        {
+                                            type: 'value',
+                                            date: dateRPcount
+                                        }
+                                    ],
+                                    series : [
+                                        {
+                                            name:'惩',
+                                            type:'bar',
+                                            stack:'sum',
+                                            itemStyle:{
+                                                normal:{
+                                                    label: {
+                                                        show: true,		//开启显示
+                                                        position: 'inside',	//在上方显示
+                                                        textStyle: {	    //数值样式
+                                                            color: 'black',
+                                                            fontSize: 16
+                                                        }
+                                                    },
+                                                    color:'#ff3333'
+                                                }
+                                            },
+                                            data:dateofClassR
+                                        },
+                                        {
+                                            name:'奖',
+                                            type:'bar',
+                                            stack:'sum',
+                                            barWidth : 60,
+                                            itemStyle:{
+                                                normal:{
+                                                    label: {
+                                                        show: true,		//开启显示
+                                                        position: 'inside',	//在上方显示
+                                                        textStyle: {	    //数值样式
+                                                            color: 'black',
+                                                            fontSize: 16
+                                                        }
+                                                    },
+                                                    color:'#003300'
+                                                }
+                                            },
+                                            data:dateofClassP
+                                        },
+                                        {
+                                            name: '总计',
+                                            type: 'bar',
+                                            stack: 'sum',
+                                            label: {
+                                                normal: {
+                                                    offset:['50', '80'],
+                                                    show: true,
+                                                    position: 'insideBottom',
+                                                    formatter:'{c}',
+                                                    textStyle:{ color:'#000' }
+                                                }
+                                            },
+                                            itemStyle:{
+                                                normal:{
+                                                    color:'rgba(128, 128, 128, 0)'
+                                                }
+                                            },
+                                            data: data3
+                                        }
+                                    ]
+                                });
+                            }
+                        },
+                        error : function(errorMsg) {
+                            //请求失败时执行该函数
+                            alert("图表请求数据失败!");
+                            myChart.hideLoading();
                         }
-                        return datas;
-                    }();
-                    option = {
-                        title:{
-                            text: '各班奖惩统计',
-                            left: 'center',
-                            top: 'top',
-                        },
-                        tooltip: {
-                            trigger: 'axis',
-                            axisPointer: {
-                                type: 'shadow'
-                            }
-                        },
-                        legend: {
-                            orient:'horizontal',
-                            x: 'center',
-                            y: 'top',
-                            data:['奖','惩']
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
-                        },
-                        xAxis : [
-                            {
-                                type : 'category',
-                                data: dataClasses,
-                            }
-                        ],
-                        yAxis : [
-                            {
-                                type: 'value',
-                                date: dateRPcount
-                            }
-                        ],
-                        series : [
-                            {
-                                name:'奖',
-                                type:'bar',
-                                stack:'sum',
-                                itemStyle:{
-                                    normal:{
-                                        label: {
-                                            show: true,		//开启显示
-                                            position: 'inside',	//在上方显示
-                                            textStyle: {	    //数值样式
-                                                color: 'black',
-                                                fontSize: 16
-                                            }
-                                        },
-                                        color:'#ff3333'
-                                    }
-                                },
-                                data:dateofClassR
-                            },
-                            {
-                                name:'惩',
-                                type:'bar',
-                                stack:'sum',
-                                barWidth : 60,
-                                itemStyle:{
-                                    normal:{
-                                        label: {
-                                            show: true,		//开启显示
-                                            position: 'inside',	//在上方显示
-                                            textStyle: {	    //数值样式
-                                                color: 'black',
-                                                fontSize: 16
-                                            }
-                                        },
-                                        color:'#003300'
-                                    }
-                                },
-                                data:dateofClassP
-                            },
-                            {
-                                name: '总计',
-                                type: 'bar',
-                                stack: 'sum',
-                                label: {
-                                    normal: {
-                                        offset:['50', '80'],
-                                        show: true,
-                                        position: 'insideBottom',
-                                        formatter:'{c}',
-                                        textStyle:{ color:'#000' }
-                                    }
-                                },
-                                itemStyle:{
-                                    normal:{
-                                        color:'rgba(128, 128, 128, 0)'
-                                    }
-                                },
-                                data: data3
-                            }
-                        ]
-                    };
-                    // 为echarts对象加载数据
-                    myChart.setOption(option);
+                    })
                 }
             );
         </script>

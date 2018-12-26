@@ -19,7 +19,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/images/favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>班级管理</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -51,13 +51,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">GMS</a>
+            <a class="navbar-brand">GMS</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/admin/course/showAllCourse">课程管理</a></li>
                 <li><a href="/admin/student/showAllStudent">学生管理</a></li>
-                <li class="active"><a href="#">班级管理</a></li>
+                <li class="active"><a href="/admin/class/showAllClass">班级管理</a></li>
                 <li><a href="/admin/tutor/showAllTutor">导师管理</a></li>
                 <li><a href="/admin/specialty/showAllSpecialty">专业管理</a></li>
                 <li><a href="/admin/rprecordmanage/showAllRPrecord">奖罚管理</a></li>
@@ -65,11 +65,11 @@
             <div class="collapse navbar-collapse pull-right">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">你的名字 <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${sessionScope.login_admin.admin_name} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">修改信息</a></li>
                             <li><a href="#">切换账号</a></li>
-                            <li><a href="#">退出</a></li>
+                            <li><a href="/admin/exit">退出</a></li>
                         </ul>
                     </li>
                 </ul>

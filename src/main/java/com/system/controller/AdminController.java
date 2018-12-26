@@ -11,9 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,10 +57,39 @@ public class AdminController {
     private RewardPunishRecordExample rewardPunishRecordExample;
     @Autowired
     private IRewardPunishRecordService rewardPunishRecordService;
+    @RequestMapping(value = "/admin_login",method = RequestMethod.POST)
+    public String AdminLogin(@RequestParam(value = "login_info") String admin_name, @RequestParam(value = "login_psw") String admin_password, HttpSession session, Model model) {
+        int login_result = adminService.adminLogin(admin_name, admin_password);
+        System.out.println(login_result);
+        if(login_result==1){
+            Admin login_admin = adminService.selectAdminByPK(admin_name);
+            session.setAttribute("login_admin",login_admin);
+            return "redirect:course/showAllCourse";
+        }
+        else if(login_result==-1) {
+            model.addAttribute("error_msg", "管理员密码错误");
+            return "admin/error";
+        }
+        else {
+            model.addAttribute("error_msg", "此账号不存在");
+            return "admin/error";
+        }
+    }
+
+    @RequestMapping("/exit")
+    public String exit(HttpSession session){
+        session.invalidate();
+        return "exit";
+    }
     @RequestMapping(value = "/student/addStudent", method = RequestMethod.POST)
-    public String AddStudentInfo(Student student) {
-        adminService.AddStudentInfo(student);
-        return "redirect:showAllStudent";
+    public String AddStudentInfo(Student student,Model model) {
+        try {
+            adminService.AddStudentInfo(student);
+            return "redirect:showAllStudent";
+        } catch (Exception e) {
+            model.addAttribute("error_operate_msg", "学号已经存在，不能添加");
+            return "admin/admin-operate-error";
+        }
     }
     @RequestMapping(value = "/student/searchStudent",method = RequestMethod.POST)
     public String SearchStudentByPK(Integer keyword, Model model) { studentExample.clear();
@@ -72,9 +103,14 @@ public class AdminController {
         return "admin/search-student-result";
     }
     @RequestMapping(value = "/student/deleteStudent")
-    public String DeleteStudent(Integer student_id) {
-        studentService.deleteStudentByPK(student_id);
-        return "redirect:showAllStudent";
+    public String DeleteStudent(Integer student_id,Model model) {
+        try {
+            studentService.deleteStudentByPK(student_id);
+            return "redirect:showAllStudent";
+        } catch (Exception e) {
+            model.addAttribute("error_operate_msg", "此学生尚存其他关联关系，暂不能删除");
+            return "admin/admin-operate-error";
+        }
     }
     @RequestMapping(value = "/student/updateStudent", method = RequestMethod.POST)
     public String UpdateStudent(Integer update_stu_id, Integer new_stu_class, Integer new_stu_tutor, Integer new_stu_specialty, String new_stu_name, String new_stu_psw, String new_stu_sex, String new_stu_birthday, String new_stu_phonenumber, String new_stu_address) {
@@ -98,13 +134,6 @@ public class AdminController {
         studentService.updateStudentByExampleSelective(student, studentExample);
         return "redirect:showAllStudent";
     }
-    @RequestMapping("/student/showAddStudent")
-    public String showAddStuInfo(Model model) {
-        model.addAttribute(new Student());
-        classExample.clear();
-        model.addAttribute("classes", classService.selectClassesByCondition(classExample));
-        return "admin/inserStudentInfo";
-    }
     @RequestMapping(value = "/student/showAllStudent")
     public String showAllStudent(ModelMap modelMap) {
         studentExample.clear();
@@ -118,13 +147,16 @@ public class AdminController {
         modelMap.addAttribute(new Student());
         return "admin/admin-students";
     }
-
     @RequestMapping(value = "/class/deleteClass")
-    public String DeleteClass(Integer class_id) {
-        classService.deleteClassByClassId(class_id);
+    public String DeleteClass(Integer class_id,Model model) {
+        try {
+            classService.deleteClassByClassId(class_id);
+        } catch (Exception e) {
+            model.addAttribute("error_operate_msg", "此班级尚存其他关联关系，暂不能删除");
+            return "admin/admin-operate-error";
+        }
         return "redirect:showAllClass";
     }
-
     @RequestMapping(value = "/class/updateClass", method = RequestMethod.POST)
     public String UpdateClass(Integer update_class_id, String new_class_name, Integer new_class_nums) {
         classExample.clear();
@@ -135,9 +167,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/class/addClass")
-    public String AddClassInfo(Class cla) {
-        classService.insertClassSelective(cla);
-        return "redirect:showAllClass";
+    public String AddClassInfo(Class cla,Model model) {
+        try {
+            classService.insertClassSelective(cla);
+            return "redirect:showAllClass";
+        } catch (Exception e) {
+            model.addAttribute("error_operate_msg", "已经存在该班级名啦");
+            return "admin/admin-operate-error";
+        }
     }
 
     @RequestMapping(value = "/class/showAllClass")
@@ -164,10 +201,15 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/tutor/deleteTutor")
-    public String DeleteTutor(Integer tutor_id) {
-        tutorExample.clear();
-        tutorExample.createCriteria().andTutor_idEqualTo(tutor_id);
-        tutorService.deletTutorByCondition(tutorExample);
+    public String DeleteTutor(Integer tutor_id,Model model) {
+        try {
+            tutorExample.clear();
+            tutorExample.createCriteria().andTutor_idEqualTo(tutor_id);
+            tutorService.deletTutorByCondition(tutorExample);
+        } catch (Exception e) {
+            model.addAttribute("error_operate_msg", "此导师尚存其他关联关系，暂不能删除");
+            return "admin/admin-operate-error";
+        }
         return "redirect:showAllTutor";
     }
 
@@ -192,10 +234,15 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/specialty/deleteSpecialty")
-    public String DeleteSpecialty(Integer specialty_id) {
-        specialtyExample.clear();
-        specialtyExample.createCriteria().andSpecialty_idEqualTo(specialty_id);
-        specialtyService.deletSpecialtyByCondition(specialtyExample);
+    public String DeleteSpecialty(Integer specialty_id,Model model) {
+        try {
+            specialtyExample.clear();
+            specialtyExample.createCriteria().andSpecialty_idEqualTo(specialty_id);
+            specialtyService.deletSpecialtyByCondition(specialtyExample);
+        } catch (Exception e) {
+            model.addAttribute("error_operate_msg", "此专业尚存其他关联关系，暂不能删除");
+            return "admin/admin-operate-error";
+        }
         return "redirect:showAllSpecialty";
     }
 
@@ -254,9 +301,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/course/deleteCourse")
-    public String DeleteCourse(Integer course_id) {
-        courseExample.createCriteria().andCourse_idEqualTo(course_id);
-        courseService.deletCourseByCondition(courseExample);
+    public String DeleteCourse(Integer course_id,Model model) {
+        try {
+            courseExample.createCriteria().andCourse_idEqualTo(course_id);
+            courseService.deletCourseByCondition(courseExample);
+        } catch (Exception e) {
+            model.addAttribute("error_operate_msg", "此课程尚存其他关联关系，暂不能删除");
+            return "admin/admin-operate-error";
+        }
         return "redirect:showAllCourse";
     }
 
@@ -286,9 +338,14 @@ public class AdminController {
         return "admin/admin-terms";
     }
     @RequestMapping("/term/deleteTerm")
-    public String deleteTerm(Integer term_id) {
-        termSerivice.deleteTermByPK(term_id);
-        return "redirect:showAllTerm";
+    public String deleteTerm(Integer term_id,Model model) {
+        try {
+            termSerivice.deleteTermByPK(term_id);
+            return "redirect:showAllTerm";
+        } catch (Exception e) {
+            model.addAttribute("error_operate_msg", "此学期尚存其他关联关系，暂不能删除");
+            return "admin/admin-operate-error";
+        }
     }
     @RequestMapping(value = "/term/addTerm",method = RequestMethod.POST)
     public String addTerm(Term term) {
@@ -324,7 +381,7 @@ public class AdminController {
 
     @RequestMapping(value = "/rprecordmanage/statistics")
     public String showRPStatistics() {
-        return "admin/admin-r-p-statistics-copy";
+        return "admin/admin-r-p-statistics";
     }
 
     @RequestMapping(value = "rprecordmanage/getJsonData", method = RequestMethod.POST)
@@ -332,14 +389,29 @@ public class AdminController {
     public List<JsonDataOfClassRPrecord> getAllClassesRPrecords() {
         List<JsonDataOfClassRPrecord> jsonDataOfClassRPrecords = new ArrayList<JsonDataOfClassRPrecord>();
         classExample.clear();
-        rewardPunishRecordExample.clear();
         List<Class> classes = classService.selectClassesByCondition(classExample);
+        List<Integer> rewardPunishes_ids = rewardPunishService.getAllPItemIDs();//奖励ID集
+        List<Integer> rewardPunishesmins_ids =rewardPunishService.getAllRItemIDs();//奖励ID集
         for (Class cla:classes) {
-            studentExample.clear();
+            try {
+                List<Student> students = studentService.selectStudentsByClassID(cla.getClass_id());//这个班里的所有学生
+                List<Integer> stu_ids = new ArrayList<Integer>();
+                stu_ids.clear();
+                for (Student stu:students
+                     ) {
+                    stu_ids.add(stu.getStudent_id());
+                }
+                rewardPunishRecordExample.clear();
+                rewardPunishRecordExample.createCriteria().andStudent_idIn(stu_ids).andReward_punish_idIn(rewardPunishes_ids);
+                Integer class_P_count = rewardPunishRecordService.selectRPrecordByCondition(rewardPunishRecordExample).size();//班级奖励数
+                rewardPunishRecordExample.clear();
+                rewardPunishRecordExample.createCriteria().andStudent_idIn(stu_ids).andReward_punish_idIn(rewardPunishesmins_ids);
+                Integer class_R_count = rewardPunishRecordService.selectRPrecordByCondition(rewardPunishRecordExample).size();//班级惩罚数
+                jsonDataOfClassRPrecords.add(new JsonDataOfClassRPrecord(cla.getClass_name(), class_P_count, class_R_count));
+            } catch (Exception e) {
+                jsonDataOfClassRPrecords.add(new JsonDataOfClassRPrecord(cla.getClass_name(), 0, 0));
+            }
         }
-        jsonDataOfClassRPrecords.add(new JsonDataOfClassRPrecord("一班", 10, 20));
-        jsonDataOfClassRPrecords.add(new JsonDataOfClassRPrecord("二班", 20, 40));
-        jsonDataOfClassRPrecords.add(new JsonDataOfClassRPrecord("三班", 23, 45));
         return jsonDataOfClassRPrecords;
     }
 

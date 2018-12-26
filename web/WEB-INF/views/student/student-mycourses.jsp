@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: Lab1203-1
@@ -23,19 +26,17 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/images/favicon.ico">
-    <title>登录</title>
+    <title>我的课程</title>
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <script src="/js/ie-emulation-modes-warning.js"></script>
     <script src="/js/admin-course.js"></script>
-
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="/css/signin.css" rel="stylesheet">
     <link href="/css/dashboard.css" rel="stylesheet">
     <link href="/css/starter-template.css" rel="stylesheet">
-
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="/js/ie-emulation-modes-warning.js"></script>
@@ -79,55 +80,55 @@
         </div>
     </div>
 </nav>
-
 <div class="container">
-
-    <div class="starter-template">
-
-        <br>  <br>
-        <div class="row">
-
-            <div class="col-lg-4 col-sm-4">
-                <a href="/student/${sessionScope.login_student.student_id}/myRPrecord" target="_blank">
-                <div class="content">
-                    <div class="title-icon">
-                <span class="lazy-loaded over" style="padding-top: 56.25%;">
-                  <img data-original="/images/myhuawei6.png" class="lazy img-responsive" src="/images/myhuawei6.png"></span>
-                    </div>
-                    <h3>
-                        奖惩情况
-                    </h3>
+    <h1 style="display: inline-block">选课&nbsp;&nbsp;&nbsp;<a data-toggle="modal" data-target="#newStuCour" href="#" title="选课"><img src="/images/add.png"></a></h1>
+    <div class="modal fade" id="newStuCour" tabindex="-1" role="dialog" aria-labelledby="courseInfo" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">新建课程信息</h4>
                 </div>
-                </a>
-            </div>
-            <div class="col-lg-4 col-sm-4">
-                <a href="/student/${sessionScope.login_student.student_id}/myInfo" target="_blank">
-                <div class="content">
-                    <div class="title-icon">
-                <span class="lazy-loaded over" style="padding-top: 56.25%;">
-                  <img data-original="/images/myhuawei1.png"
-                       class="lazy img-responsive" src="/images/myhuawei1.png"></span>
-                    </div>
-                    <h3>
-                        个人信息
-                    </h3>
+                <div class="modal-body">
+                    <sf:form commandName="stuCourRKey" method="post" action="/student/${sessionScope.login_student.student_id}/addCourse">
+                        <div class="form-group">
+                            <label>课程</label>
+                            <sf:select cssClass="form-control" path="course_id" items="${unselected_courses}"  itemValue="course_id" itemLabel="course_name"/>
+                        </div>
+                        <div class="form-group">
+                            <button type="reset" class="btn btn-default">重置</button>
+                            <button type="submit" class="btn btn-primary btn-success">添加</button>
+                        </div>
+                    </sf:form>
                 </div>
-                </a>
-            </div>
-            <div class="col-lg-4 col-sm-4">
-                <a href="/student/${sessionScope.login_student.student_id}/myCourse" target="_blank">
-                <div class="content">
-                    <div class="title-icon">
-                <span class="lazy-loaded over" style="padding-top: 56.25%;">
-                  <img data-original="/images/myhuawei2.png" class="lazy img-responsive" src="/images/myhuawei2.png"></span>
-                    </div>
-                    <h3>
-                        我的课程
-                    </h3>
-                </div>
-                </a>
             </div>
         </div>
+    </div>
+    <div class="row col-lg-12">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>课程名称</th>
+                <th>任课老师</th>
+                <th>起止周</th>
+                <th>上课时间</th>
+                <th>上课地点</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${courses}" var="cour" varStatus="sta">
+                <tr>
+                    <td>${sta.index+1}</td>
+                    <td>${cour.course_name}</td>
+                    <td>${cour.course_teacher}</td>
+                    <td>${cour.course_week}</td>
+                    <td>${cour.course_start_time}--${cour.course_end_time}</td>
+                    <td>${cour.course_address}</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
     </div>
 </div><!-- /.container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

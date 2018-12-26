@@ -19,7 +19,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/images/favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>学生信息管理</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -55,7 +55,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">GMS</a>
+            <a class="navbar-brand">GMS</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -70,7 +70,7 @@
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">你的名字 <span class="caret"></span></a>
+                           aria-expanded="false">${sessionScope.login_admin.admin_name} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">修改信息</a></li>
                             <li><a href="#">切换账号</a></li>
@@ -104,6 +104,8 @@
                                 <sf:input path="student_id" cssClass="form-control"/>
                                 <label>学生姓名</label>
                                 <sf:input path="name" cssClass="form-control"/>
+                                <label>学生班级</label>
+                                <sf:select cssClass="form-control" path="class_id" items="${classes}"  itemValue="class_id" itemLabel="class_name"/>
                                 <label>学生密码</label>
                                 <sf:input path="password" cssClass="form-control" value="123456"/>
                             </div>

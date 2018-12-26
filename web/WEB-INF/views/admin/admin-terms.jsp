@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/images/favicon.ico">
-    <title>Starter Template for Bootstrap</title>
+    <title>学期设置</title>
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -66,7 +66,7 @@
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">你的名字 <span class="caret"></span></a>
+                           aria-expanded="false">${sessionScope.login_admin.admin_name} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">修改信息</a></li>
                             <li><a href="#">切换账号</a></li>
@@ -121,7 +121,7 @@
             <li role="presentation"><a href="/admin/rprecordmanage/showAllRPrecord">奖惩记录</a></li>
             <li role="presentation"><a href="/admin/rpmanage/showAllRP">奖惩项设置</a></li>
             <li role="presentation" class="active"><a href="/admin/term/showAllTerm">学期信息</a></li>
-            <li role="presentation"><a href="#">统计分析</a></li>
+            <li role="presentation"><a href="/admin/rprecordmanage/statistics">统计分析</a></li>
         </ul>
         <div class="row col-lg-9">
             <div class="col-md-12">
