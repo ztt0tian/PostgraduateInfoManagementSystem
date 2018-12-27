@@ -91,8 +91,6 @@
                     <div class="modal-body">
                         <sf:form commandName="course" method="post" action="/admin/course/addCourse">
                             <div class="form-group">
-                                <label>课程ID</label>
-                                <sf:input path="course_id"/>
                                 <label>课程名称</label>
                                 <sf:input path="course_name" cssClass="form-control"/>
                                 <label>任课老师</label>
