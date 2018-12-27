@@ -111,7 +111,7 @@
         <div class="navbar-right col-sm-4" id="so" style="margin-top: 1.5em">
             <div class="input-group">
                 <form class="searchForm" id="search-form" action="#">
-                    <input type="text" class="form-control" placeholder="导师查询" name="keyword" id="search-kw"/>
+                    <input type="text" class="form-control" placeholder="奖惩记录查询" name="keyword" id="search-kw"/>
                 </form>
                 <span class="input-group-addon"><a href="javascript:void(0);" onclick="searchByKW()" id="search-course"><i class="glyphicon glyphicon-search"><span >搜索</span></i></a></span>
             </div>

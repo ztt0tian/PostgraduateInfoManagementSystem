@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2018/12/16 20:03:14                          */
+/* Created on:     2018/12/23 16:00:22                          */
 /*==============================================================*/
 
 
@@ -44,7 +44,8 @@ create table class
    class_id             int not null auto_increment,
    class_name           varchar(20) not null,
    class_nums           int not null default 0,
-   primary key (class_id)
+   primary key (class_id),
+   unique key AK_UQ_classname (class_name)
 );
 
 alter table class comment '班级表';
@@ -54,16 +55,15 @@ alter table class comment '班级表';
 /*==============================================================*/
 create table course
 (
-   course_id            int not null auto_increment comment '课程ID',
-   course_name          varchar(255) not null comment '课程名',
-   course_desc          varchar(255) not null default 'course description' comment '课程介绍',
-   course_point         int not null default 0 comment '课程学分',
+   course_id            int not null auto_increment comment '课程编号',
+   course_name          varchar(255) not null comment '课程名称',
    course_teacher       varchar(255) comment '任课老师',
-   course_during        char(255) not null default '14:00-17:00' comment '上课时间',
-   course_place         varchar(255) not null default '东苑' comment '上课地点',
-   course_time          varchar(255) not null default '1-20' comment '上课起止周',
-   course_checkmethod   varchar(255) not null default '考试' comment '考核方式',
-   primary key (course_id)
+   course_week          varchar(255) comment '起止周',
+   course_start_time    time comment '上课时间',
+   course_end_time      time comment '下课时间',
+   course_address       varchar(255) comment '上课地点',
+   primary key (course_id),
+   unique key AK_UQ_coursename (course_name)
 );
 
 alter table course comment '课程表';
@@ -76,7 +76,9 @@ create table reward_punish
    reward_punish_id     int not null auto_increment,
    reward_punish_name   varchar(255) not null,
    reward_punish_money  float default 0,
-   primary key (reward_punish_id)
+   reward_punish_flag   int not null,
+   primary key (reward_punish_id),
+   unique key AK_UQ_rpname (reward_punish_name)
 );
 
 alter table reward_punish comment '奖励惩罚表';
@@ -103,8 +105,9 @@ create table specialty
 (
    specialty_id         int not null auto_increment,
    specialty_name       varchar(255) not null,
-   specialty_desc       varchar(1024) default '专业介绍',
-   primary key (specialty_id)
+   specialty_desc       varchar(1024),
+   primary key (specialty_id),
+   unique key AK_UQ_specialtyname (specialty_name)
 );
 
 alter table specialty comment '专业表';
@@ -114,7 +117,7 @@ alter table specialty comment '专业表';
 /*==============================================================*/
 create table stu_cour_r
 (
-   course_id            int not null comment '课程ID',
+   course_id            int not null comment '课程编号',
    student_id           int not null,
    primary key (course_id, student_id)
 );
@@ -131,8 +134,8 @@ create table student
    tutor_id             int,
    specialty_id         int,
    name                 varchar(20) not null,
-   password             varchar(20) not null default '123456',
-   sex                  varchar(1) not null default 'F',
+   password             varchar(20) not null,
+   sex                  varchar(1),
    birthday             date,
    phonenumber          varchar(11),
    address              varchar(255),
@@ -148,7 +151,8 @@ create table term
 (
    term_id              int not null auto_increment,
    trem_name            varchar(20) not null,
-   primary key (term_id)
+   primary key (term_id),
+   unique key AK_UQ_termname (trem_name)
 );
 
 alter table term comment '学期表';
@@ -167,26 +171,26 @@ create table tutor
 alter table tutor comment '导师表';
 
 alter table reward_punish_record add constraint FK_rp_record_r foreign key (reward_punish_id)
-      references reward_punish (reward_punish_id) on delete restrict on update restrict;
+      references reward_punish (reward_punish_id) on delete restrict on update cascade;
 
 alter table reward_punish_record add constraint FK_stu_rp_record foreign key (student_id)
-      references student (student_id) on delete restrict on update restrict;
+      references student (student_id) on delete restrict on update cascade;
 
 alter table reward_punish_record add constraint FK_term_record_r foreign key (term_id)
-      references term (term_id) on delete restrict on update restrict;
+      references term (term_id) on delete restrict on update cascade;
 
 alter table stu_cour_r add constraint FK_stu_cour_r foreign key (course_id)
-      references course (course_id) on delete restrict on update restrict;
+      references course (course_id) on delete cascade on update cascade;
 
 alter table stu_cour_r add constraint FK_stu_cour_r2 foreign key (student_id)
-      references student (student_id) on delete restrict on update restrict;
+      references student (student_id) on delete cascade on update cascade;
 
 alter table student add constraint FK_class_student_r foreign key (class_id)
-      references class (class_id) on delete restrict on update restrict;
+      references class (class_id) on delete restrict on update cascade;
 
 alter table student add constraint FK_specialty_student_r foreign key (specialty_id)
-      references specialty (specialty_id) on delete restrict on update restrict;
+      references specialty (specialty_id) on delete restrict on update cascade;
 
 alter table student add constraint FK_tutor_student_r foreign key (tutor_id)
-      references tutor (tutor_id) on delete restrict on update restrict;
+      references tutor (tutor_id) on delete restrict on update cascade;
 
